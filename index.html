@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<title>药典下载器</title>
+
+<head>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <script>
+
+    </script>
+    <link
+        href="https://cdn.bootcdn.net/ajax/libs/material-components-web/8.0.0-canary.4e9343929.0/material-components-web.min.css"
+        rel="stylesheet">
+    <script
+        src="https://cdn.bootcdn.net/ajax/libs/material-components-web/8.0.0-canary.4e9343929.0/material-components-web.min.js"></script>
+</head>
+
+<body>
+    <H2>每一页有一种或多种下载方式可用，建议每个方式都试一试</H2>
+    <H4>数据来自药物在线</H4>
+    <label class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+        <input type="number" id="year" class="mdc-text-field__input" aria-labelledby="my-label-id">
+        <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+                <span class="mdc-floating-label" id="my-label-id">药典年份</span>
+            </span>
+            <span class="mdc-notched-outline__trailing"></span>
+        </span>
+    </label>
+    <label class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+        <input type="number" id="num" class="mdc-text-field__input" aria-labelledby="my-label-id">
+        <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+                <span class="mdc-floating-label" id="my-label-id">第X册</span>
+            </span>
+            <span class="mdc-notched-outline__trailing"></span>
+        </span>
+    </label>
+    <label class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+        <input type="number" id="page" class="mdc-text-field__input" aria-labelledby="my-label-id">
+        <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+                <span class="mdc-floating-label" id="my-label-id">页码</span>
+            </span>
+            <span class="mdc-notched-outline__trailing"></span>
+        </span>
+    </label>
+    <button onclick="dlThis();" class="mdc-button foo-button1">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">尝试仅本页</span>
+    </button>
+    <button onclick="dlBefore();" class="mdc-button foo-button2">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">尝试连带前一页</span>
+    </button>
+    <button onclick="dlAfter();" class="mdc-button foo-button3">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">尝试连带后一页</span>
+    </button>
+    <script>
+        var dlThis = function () {
+            funDownload("https://www.drugfuture.com/Pharmacopoeia/CP" + document.getElementById("year").value + "-" + document.getElementById("num").value + "/" + document.getElementById("page").value + "-" + document.getElementById("page").value + ".pdf", document.getElementById("page").value + ".pdf")
+        }
+        var dlBefore = function () {
+            funDownload("https://www.drugfuture.com/Pharmacopoeia/CP" + document.getElementById("year").value + "-" + document.getElementById("num").value + "/" + (Number(document.getElementById("page").value) - 1) + "-" + document.getElementById("page").value + ".pdf", (Number(document.getElementById("page").value) - 1) + "-" + document.getElementById("page").value + ".pdf")
+        }
+        var dlAfter = function () {
+            funDownload("https://www.drugfuture.com/Pharmacopoeia/CP" + document.getElementById("year").value + "-" + document.getElementById("num").value + "/" + document.getElementById("page").value + "-" + (Number(document.getElementById("page").value) + 1) + ".pdf", document.getElementById("page").value + "-" + (Number(document.getElementById("page").value) + 1) + ".pdf")
+        }
+    </script>
+    <script>
+        window.mdc.autoInit();
+        mdc.ripple.MDCRipple.attachTo(document.querySelector('.foo-button1'));
+        mdc.ripple.MDCRipple.attachTo(document.querySelector('.foo-button2'));
+        mdc.ripple.MDCRipple.attachTo(document.querySelector('.foo-button3'));
+        var getRandomColor = function () {
+            return '#' + (function (color) {
+                return (color += 'abcdef'[Math.floor(Math.random() * 6)])
+                    && (color.length == 6) ? color : arguments.callee(color);
+            })('');
+        }
+        function strip(num, precision = 10) {
+            return +parseFloat(num.toPrecision(precision));
+        }
+        function funDownload(content, filename) {
+
+            var eleLink = document.createElement('a');
+            eleLink.download = filename;
+            eleLink.style.display = 'none';
+            eleLink.href = content;
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            document.body.removeChild(eleLink);
+        };
+    </script>
+</body>
+
+</html>
